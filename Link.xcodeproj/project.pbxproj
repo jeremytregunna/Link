@@ -10,6 +10,7 @@
 		4E38412E1C7EB1940095647B /* Link.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E38412D1C7EB1940095647B /* Link.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4E3841351C7EB1940095647B /* Link.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E38412A1C7EB1940095647B /* Link.framework */; };
 		4E38413A1C7EB1940095647B /* LinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3841391C7EB1940095647B /* LinkTests.swift */; };
+		4E3841451C7EB1B20095647B /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3841441C7EB1B20095647B /* Link.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		4E3841341C7EB1940095647B /* LinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E3841391C7EB1940095647B /* LinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkTests.swift; sourceTree = "<group>"; };
 		4E38413B1C7EB1940095647B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4E3841441C7EB1B20095647B /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			children = (
 				4E38412D1C7EB1940095647B /* Link.h */,
 				4E38412F1C7EB1940095647B /* Info.plist */,
+				4E3841441C7EB1B20095647B /* Link.swift */,
 			);
 			path = Link;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 				TargetAttributes = {
 					4E3841291C7EB1940095647B = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = X35R3JB72Y;
 					};
 					4E3841331C7EB1940095647B = {
 						CreatedOnToolsVersion = 7.2;
@@ -194,6 +198,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E3841451C7EB1B20095647B /* Link.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,28 +313,35 @@
 		4E38413F1C7EB1940095647B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Link/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.tregunna.jeremy.libs.Link;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		4E3841401C7EB1940095647B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Link/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.tregunna.jeremy.libs.Link;
 				PRODUCT_NAME = "$(TARGET_NAME)";
