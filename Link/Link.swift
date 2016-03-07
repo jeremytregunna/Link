@@ -43,7 +43,7 @@ public class Link<T> {
         }
     }
     
-    public func receive(block: (T) -> Void) -> NSUUID {
+    public func subscribe(block: (T) -> Void) -> NSUUID {
         let uuid = NSUUID()
         objc_sync_enter(lock)
         subscriptions[uuid] = block

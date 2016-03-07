@@ -18,8 +18,8 @@ class LinkTests: XCTestCase {
     }
 
     func testReceiveValue() {
-        let exp = expectationWithDescription("receive")
-        link.receive { value in
+        let exp = expectationWithDescription("subscribe")
+        link.subscribe { value in
             XCTAssertEqual(42, value)
             exp.fulfill()
         }
@@ -31,11 +31,11 @@ class LinkTests: XCTestCase {
     }
     
     func testReceiveMultipleValues() {
-        let exp = expectationWithDescription("receive")
+        let exp = expectationWithDescription("subscribe")
         let values = [23, 42]
         var saw = [Int]()
 
-        link.receive { value in
+        link.subscribe { value in
             saw.append(value)
             if values.last == value {
                 exp.fulfill()
@@ -53,14 +53,14 @@ class LinkTests: XCTestCase {
     }
     
     func testMultipleReceiveValues() {
-        let exp1 = expectationWithDescription("receive1")
-        let exp2 = expectationWithDescription("receive2")
+        let exp1 = expectationWithDescription("subscribe1")
+        let exp2 = expectationWithDescription("subscribe2")
 
-        link.receive { value in
+        link.subscribe { value in
             XCTAssertEqual(42, value)
             exp1.fulfill()
         }
-        link.receive { value in
+        link.subscribe { value in
             XCTAssertEqual(42, value)
             exp2.fulfill()
         }
@@ -72,19 +72,19 @@ class LinkTests: XCTestCase {
     }
     
     func testMultipleReceivesMultipleValues() {
-        let exp1 = expectationWithDescription("receive1")
-        let exp2 = expectationWithDescription("receive2")
+        let exp1 = expectationWithDescription("subscribe1")
+        let exp2 = expectationWithDescription("subscribe2")
         let values = [23, 42]
         var saw1 = [Int]()
         var saw2 = [Int]()
         
-        link.receive { value in
+        link.subscribe { value in
             saw1.append(value)
             if values.last == value {
                 exp1.fulfill()
             }
         }
-        link.receive { value in
+        link.subscribe { value in
             saw2.append(value)
             if values.last == value {
                 exp2.fulfill()
@@ -104,7 +104,7 @@ class LinkTests: XCTestCase {
     
     func testDoesNotReceiveIfAskingAfterValueSent() {
         link.send(42)
-        link.receive { value in
+        link.subscribe { value in
             XCTFail("Something's wibbly wobbly.")
         }
     }
@@ -114,7 +114,7 @@ class LinkTests: XCTestCase {
 
         link = Link<Int>(rebroadcastLastValue: true)
         link.send(42)
-        link.receive { value in
+        link.subscribe { value in
             XCTAssertEqual(42, value)
             exp.fulfill()
         }
@@ -125,7 +125,7 @@ class LinkTests: XCTestCase {
     }
     
     func testWontReceiveValueAfterUnsubscribing() {
-        let uuid = link.receive { value in
+        let uuid = link.subscribe { value in
             XCTFail("Received value after unsubscribing")
         }
         link.unsubscribe(uuid)
@@ -137,10 +137,10 @@ class LinkTests: XCTestCase {
             return value % 2 == 0
         }
 
-        link.receive { value in
+        link.subscribe { value in
             XCTFail("Did not filter out odd value")
         }
-        let uuid = link.receive { value in
+        let uuid = link.subscribe { value in
             XCTFail("Received value after unsubscribing")
         }
         link.unsubscribe(uuid)
@@ -151,12 +151,12 @@ class LinkTests: XCTestCase {
         link.filter { value in
             return value % 2 == 0
         }
-        let uuid = link.receive { value in
+        let uuid = link.subscribe { value in
             XCTFail("Received value after unsubscribing")
         }
         link.unsubscribe(uuid)
         
-        link.receive { value in
+        link.subscribe { value in
             XCTAssertEqual(23, value)
         }
 
@@ -168,7 +168,7 @@ class LinkTests: XCTestCase {
         
         link.filter { value in
             return value % 2 == 0
-        }.receive { value in
+        }.subscribe { value in
             saw.append(value)
         }
         
