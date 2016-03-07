@@ -12,15 +12,16 @@ public class Link<T> {
     typealias subBlock = (T) -> Void
     typealias filterBlock = (T) -> Bool
 
-    private var lock = NSObject()
     private var subscriptions = [NSUUID: subBlock]()
     private var filter: filterBlock?
     private var lastValue: T?
+    private var queue: dispatch_queue_t
 
     public var rebroadcastLastValue: Bool
     
     public required init(rebroadcastLastValue rebroadcast: Bool) {
         self.rebroadcastLastValue = rebroadcast
+        self.queue = dispatch_queue_create("ca.tregunna.link.queue", DISPATCH_QUEUE_CONCURRENT)
     }
 
     public convenience init() {
@@ -28,48 +29,53 @@ public class Link<T> {
     }
 
     public func send(value: T) {
-        objc_sync_enter(lock)
-        lastValue = value
-        objc_sync_exit(lock)
+        dispatch_barrier_async(self.queue) {
+            self.lastValue = value
+        }
+
         for (_, sub) in subscriptions {
-            if let f = filter {
-                if f(value) {
+            dispatch_sync(self.queue) {
+                if let f = self.filter {
+                    if f(value) {
+                        sub(value)
+                        return
+                    }
+                } else {
                     sub(value)
-                    return
                 }
-            } else {
-                sub(value)
             }
         }
     }
     
     public func subscribe(block: (T) -> Void) -> NSUUID {
         let uuid = NSUUID()
-        objc_sync_enter(lock)
-        subscriptions[uuid] = block
-        objc_sync_exit(lock)
-        if rebroadcastLastValue {
-            guard let v = lastValue else { return uuid }
-            block(v)
+        dispatch_sync(self.queue) {
+            self.subscriptions[uuid] = block
+
+            if self.rebroadcastLastValue {
+                if let v = self.lastValue {
+                    block(v)
+                }
+            }
         }
         return uuid
     }
-    
+
     public func unsubscribe(uuids: NSUUID...) {
-        objc_sync_enter(lock)
-        for arg: NSUUID in uuids {
-            subscriptions[arg] = nil
+        dispatch_barrier_sync(self.queue) {
+            for arg: NSUUID in uuids {
+                self.subscriptions[arg] = nil
+            }
+            if self.subscriptions.count == 0 {
+                self.filter = nil
+            }
         }
-        if subscriptions.count == 0 {
-            filter = nil
-        }
-        objc_sync_exit(lock)
     }
     
     public func filter(block: (T) -> Bool) -> Self {
-        objc_sync_enter(lock)
-        filter = block
-        objc_sync_exit(lock)
+        dispatch_barrier_sync(self.queue) {
+            self.filter = block
+        }
         return self
     }
 }
