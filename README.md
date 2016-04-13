@@ -1,6 +1,6 @@
 # Link
 
-![Travis CI](https://travis-ci.org/jeremytregunna/link.svg?branch=master "Travis CI")
+![Travis CI](https://travis-ci.org/jeremytregunna/Link.svg?branch=master "Travis CI")
 
 Link is an implementation of the observer pattern intended for use in helping
 tie together your application allowing data to flow rather than requiring you to
